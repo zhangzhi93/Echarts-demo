@@ -1,7 +1,5 @@
 {
-  "presets": [
-    ["env", { "modules": false }]
-  ],
+  "presets": ["env"],
   "plugins": ["transform-runtime"],
   "comments": false,
   "env": {
