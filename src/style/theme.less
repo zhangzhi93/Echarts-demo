@@ -4,9 +4,39 @@
 }
 .chat-table{
   height: 40vh;
-  overflow-y: auto;
+  padding:15px;
+  box-sizing: border-box;
+  position: relative;
+  .div-head{
+    display: flex;
+  }
+  .div-body{
+    overflow-y: auto;
+    height: 30vh;
+  }
   table{
     width:100%;
+    text-align: center;
     border: none;
+    thead{
+      background-color: rgb(243,62,70);
+      color:#fff;
+      th{
+        border-right:1px solid rgb(254,196,198);
+        padding:6px 0;
+        &:last-child{
+          border-right: none;
+        }
+      }
+    }
+    tbody{
+      background-color: rgb(255,235,235);
+      tr{
+        td{
+          padding:6px 0;
+          width: 33.33%;
+        }
+      }
+    }
   }
 }
