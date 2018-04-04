@@ -98,7 +98,7 @@ function renderPage(data) {
     </div>
     <div class="div-body">
       <table cellspacing=0>
-        <tbody>
+        <tbody class="col-3">
           ${data.map((val, i) => `
             <tr>
               <td>${val.house}</td>

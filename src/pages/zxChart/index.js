@@ -111,10 +111,10 @@ window.onload = function () {
     </div>
     <div class="div-body">
       <table cellspacing=0>
-        <tbody>
+        <tbody class="col-3">
           ${Data.map(val => `
             <tr>
-              <td  colspan="3">${val.name}</td>
+              <td colspan="3">${val.name}</td>
             </tr>
             ${val.collect.map(col => `
               <tr>
