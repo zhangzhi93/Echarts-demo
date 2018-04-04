@@ -5,55 +5,54 @@ window.onload = function () {
   const dom = document.getElementById("main");
   const myChart = echarts.init(dom);
   let Data = [{
-    house: '1#',
-    kg: 8,
-    tf: 5
+    name: '华东一区地块 北区',
+    collect: [{
+      house: '1#',
+      days: 5,
+    }, {
+      house: '2#',
+      days: 8
+    }, {
+      house: '3#',
+      days: 2
+    }, {
+      house: '4#',
+      days: 3
+    }]
   }, {
-    house: '2#',
-    kg: 15,
-    tf: 10
-  }, {
-    house: '3#',
-    kg: 35,
-    tf: 28
-  }, {
-    house: '4#',
-    kg: 20,
-    tf: 16
-  }, {
-    house: '5#',
-    kg: 18,
-    tf: 15
-  }, {
-    house: '6#',
-    kg: 27,
-    tf: 26
-  }, {
-    house: '7#',
-    kg: 13,
-    tf: 10
-  }, {
-    house: '8#',
-    kg: 17,
-    tf: 14
+    name: '华东二区地块 北区',
+    collect: [{
+      house: '1#',
+      days: 6
+    }, {
+      house: '2#',
+      days: 1
+    }, {
+      house: '3#',
+      days: 9
+    }, {
+      house: '4#',
+      days: 4
+    }, {
+      house: '5#',
+      days: 2
+    }]
   }];
+  let lsXData = new Array(),
+    lsYData = new Array();
+  Data.forEach((val, i) => {
+    let Xcollect = val.collect.map(h => h.house);
+    let Ycollect = val.collect.map(h => h.days)
+    lsXData.push(...Xcollect);
+    lsYData.push(...Ycollect);
+  })
   const option = {
     tooltip: {
       trigger: 'axis'
     },
-    legend: {
-      top: '10',
-      data: [{
-        name: '桩基开工',
-        icon: 'circle'
-      }, {
-        name: '土方完成',
-        icon: 'diamond'
-      }]
-    },
     xAxis: {
       type: 'category',
-      data: Data.map(val => val.house),
+      data: lsXData,
       splitLine: {
         show: true
       }
@@ -75,9 +74,9 @@ window.onload = function () {
     ],
     series: [
       {
-        name: '桩基开工',
+        name: '桩基开工-土方完成',
         type: 'line',
-        data: Data.map(val => val.kg),
+        data: lsYData,
         markLine: {
           symbol: "none",
           data: [
@@ -86,17 +85,13 @@ window.onload = function () {
               type: 'average',
               lineStyle: {
                 normal: {
-                  color: "red",
+                  color: "blue",
                   width: 2,
                   type: "solid",
                 }
               }
             }]
         }
-      }, {
-        name: '土方完成',
-        type: 'line',
-        data: Data.map(val => val.tf)
       }
     ]
   };
@@ -119,10 +114,15 @@ window.onload = function () {
         <tbody>
           ${Data.map(val => `
             <tr>
-              <td>${val.house}</td>
-              <td>${val.kg}</td>
-              <td>删除</td>
+              <td  colspan="3">${val.name}</td>
             </tr>
+            ${val.collect.map(col => `
+              <tr>
+                <td>${col.house}</td>
+                <td>${col.days}</td>
+                <td><a href="javascript:" id="${col.house}">删除</a></td>
+              </tr>
+            `).join('')}
           </tbody>`).join('')}
       </table>
     </div>`;
