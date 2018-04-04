@@ -1,19 +1,52 @@
 import * as echarts from 'echarts';
+import css from '../../style/theme.less';
 
 window.onload = function () {
-  let dom = document.getElementById("main");
-  let myChart = echarts.init(dom);
-  let option = null;
-  let html = '';
-  const symbolSize = 5;
-  const xData = ['节点1', '节点2', '节点3', '节点4', '节点5', '节点6', '节点7'];
-  const yData = ['#1', '#2', '#3', '#4', '#5', '#6', '#7'];
-  const data = [['节点6', '#1'], ['节点4', '#2'], ['节点3', '#3'], ['节点2', '#4'], ['节点7', '#5'], ['节点1', '#6'], ['节点5', '#7']]
-  //const data = [[15, 0],[16, 5],[25, 10],[32, 3],[60, 23.2], [-50, 10], [-56.5, 20], [-46.5, 30], [-22.1, 40]];
+  window.Data = [{
+    house: '1#',
+    jiedian: '节点3'
+  }, {
+    house: '2#',
+    jiedian: '节点5'
+  }, {
+    house: '3#',
+    jiedian: '节点1'
+  }, {
+    house: '4#',
+    jiedian: '节点5'
+  }, {
+    house: '5#',
+    jiedian: '节点2'
+  }, {
+    house: '6#',
+    jiedian: '节点3'
+  }, {
+    house: '7#',
+    jiedian: '节点4'
+  }, {
+    house: '8#',
+    jiedian: '节点7'
+  }, {
+    house: '9#',
+    jiedian: '节点2'
+  }];
+  renderPage(window.Data);
+  document.addEventListener("click", function (event) {
+    var target = event.target;
+    if (target.nodeName == "A") {
+      let index = target.getAttribute("id");
+      deleteJD(index);
+    }
+  })
+}
 
-  option = {
+function renderPage(data) {
+  const dom = document.getElementById("main");
+  const tableDom = document.getElementById('table_container');
+  const myChart = echarts.init(dom);
+  let option = {
     title: {
-      text: 'Try Dragging these Points'
+      text: '同业态分析结果'
     },
     tooltip: {
       triggerOn: 'none',
@@ -25,15 +58,13 @@ window.onload = function () {
     },
     xAxis: {
       type: 'category',
-      nameLocation: 'start',
-      boundaryGap:false,
-      data: xData
+      boundaryGap: false,
+      data: data.map(val => val.house)
     },
     yAxis: {
       type: 'category',
-      nameLocation: 'start',
-      boundaryGap:false,
-      data: yData
+      boundaryGap: false,
+      data: ['', '节点1', '节点2', '节点3', '节点4', '节点5', '节点6', '节点7', '节点8', '节点9']
     },
     dataZoom: [
       {
@@ -41,7 +72,7 @@ window.onload = function () {
         xAxisIndex: 0,
         filterMode: 'empty',
         start: 0,
-        end: 50,
+        end: data.length > 4 ? 4 / data.length * 100 : 100
       }
     ],
     series: [
@@ -49,40 +80,39 @@ window.onload = function () {
         type: 'line',
         smooth: true,
         showAllSymbol: true,
-        symbolSize: symbolSize,
+        symbolSize: 5,
         connectNulls: true,
-        data: data
+        data: data.map(val => val.jiedian)
       }
     ]
   };
-  if (option && typeof option === "object") {
-    myChart.setOption(option, true);
-  }
+  let tmpl = `
+    <div class="div-head">
+      <table cellspacing=0>
+        <thead>
+          <th>楼栋</th>
+          <th>当前节点</th>
+          <th>操作</th>
+        </thead>
+      </table>
+    </div>
+    <div class="div-body">
+      <table cellspacing=0>
+        <tbody>
+          ${data.map((val, i) => `
+            <tr>
+              <td>${val.house}</td>
+              <td>${val.jiedian}</td>
+              <td><a href="javascript:" id="${i}">删除</a></td>
+            </tr>
+          </tbody>`).join('')}
+      </table>
+    </div>`;
+  myChart.setOption(option, true);
+  tableDom.innerHTML = tmpl;
+}
 
-  data.forEach((val, idx) => {
-    html += `<tr><td>${val[1]}</td><td>${val[0]}</td><td><a href='javascript:'>删除123456</a></td></tr>`;
-  })
-  document.getElementById('table_list').innerHTML = html;
-  // echarts.init(document.getElementById('main')).setOption({
-  // 	series: {
-  // 		type: 'pie',
-  // 		data: [{
-  // 			name: 'A',
-  // 			value: 1212
-  // 		}, {
-  // 			name: 'B',
-  // 			value: 2323
-  // 		}, {
-  // 			name: 'C',
-  // 			value: 1919
-  // 		}]
-  // 	}
-  // });
-  // let outRender = () => Math.random();
-  // const htmlData = {
-  // 	renderText() {
-  // 		return Math.random();
-  // 	}
-  // }
-  // document.getElementById("text").innerHTML = htmlData.renderText() + 'dd' + outRender();
+function deleteJD(i) {
+  window.Data.splice(i, 1);
+  renderPage(window.Data);
 }
