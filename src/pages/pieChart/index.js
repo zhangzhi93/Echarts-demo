@@ -1,4 +1,7 @@
-import * as echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
+import  'echarts/lib/chart/pie';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
 import css from '../../style/theme.less';
 
 window.onload = function () {

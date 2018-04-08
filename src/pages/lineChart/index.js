@@ -1,4 +1,7 @@
-import * as echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
+import  'echarts/lib/chart/line';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
 import css from '../../style/theme.less';
 
 window.onload = function () {
@@ -53,8 +56,6 @@ function renderPage(data) {
       formatter: function (params) {
         return 'X: ' + params.data[0].toFixed(2) + '<br>Y: ' + params.data[1].toFixed(2);
       }
-    },
-    grid: {
     },
     xAxis: {
       type: 'category',

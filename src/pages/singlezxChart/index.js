@@ -2,7 +2,7 @@ import echarts from 'echarts/lib/echarts';
 import  'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/markLine';
-import '../../style/theme.less';
+import css from '../../style/theme.less';
 
 window.onload = function () {
   const dom = document.getElementById("main");

@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     lineChart: './src/pages/lineChart/index.js',
     pieChart: './src/pages/pieChart/index.js',
-    zxChart: './src/pages/zxChart/index.js'
+    zxChart: './src/pages/zxChart/index.js',
+    singlezxChart: './src/pages/singlezxChart/index.js'
   },
   output: {
     filename: '[name]/main.js',
@@ -69,6 +70,12 @@ module.exports = {
       filename: 'zxChart/index.html',
       template: './index.ejs',
       chunks: ['zxChart','common'],
+      inject:'head'
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'singlezxChart/index.html',
+      template: './index.ejs',
+      chunks: ['singlezxChart','common'],
       inject:'head'
     }),
   ],
