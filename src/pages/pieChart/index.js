@@ -54,10 +54,6 @@ function renderPage(data) {
     pieData.push(obj);
   });
   const option = {
-    title: {
-      text: '节点信息',
-      x: 'center'
-    },
     tooltip: {
       trigger: 'item',
       formatter: "{b} : {c} ({d}%)"
@@ -65,8 +61,8 @@ function renderPage(data) {
     series: [
       {
         type: 'pie',
-        radius: '55%',
-        center: ['50%', '60%'],
+        radius: '70%',
+        center: ['50%', '50%'],
         label: {
           show: false
         },
@@ -100,12 +96,12 @@ function renderPage(data) {
               <td>${val.node1}</td>
               <td>${val.date1}</td>
               <td rowspan="2">${val.days}</td>
-              <td>删除</td>
+              <td><a href="javascript:">删除</a></td>
             </tr>
             <tr>
               <td>${val.node2}</td>
               <td>${val.date2}</td>
-              <td>删除</td>
+              <td><a href="javascript:">删除</a></td>
             </tr>
           </tbody>`).join('')}
       </table>

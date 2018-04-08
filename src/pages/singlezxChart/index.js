@@ -1,69 +1,59 @@
 import echarts from 'echarts/lib/echarts';
-import  'echarts/lib/chart/line';
+import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/markLine';
+import 'echarts/lib/component/dataZoom';
 import css from '../../style/theme.less';
 
 window.onload = function () {
   const dom = document.getElementById("main");
   const myChart = echarts.init(dom);
   let Data = [{
-    name: '华东一区地块 北区',
-    collect: [{
-      house: '1#',
-      days: 5,
-    }, {
-      house: '2#',
-      days: 8
-    }, {
-      house: '3#',
-      days: 2
-    }, {
-      house: '4#',
-      days: 3
-    }]
+    house: '1#',
+    date: '2018-02-12',
   }, {
-    name: '华东二区地块 北区',
-    collect: [{
-      house: '1#',
-      days: 6
-    }, {
-      house: '2#',
-      days: 1
-    }, {
-      house: '3#',
-      days: 9
-    }, {
-      house: '4#',
-      days: 4
-    }, {
-      house: '5#',
-      days: 2
-    }]
+    house: '2#',
+    date: '2018-03-02',
+  }, {
+    house: '3#',
+    date: '2018-05-20',
+  }, {
+    house: '4#',
+    date: '2018-01-18',
+  }, {
+    house: '5#',
+    date: '2018-01-11',
+  }, {
+    house: '6#',
+    date: '2018-02-02',
+  }, {
+    house: '7#',
+    date: '2018-05-10',
   }];
-  let lsXData = new Array(),
-    lsYData = new Array();
-  Data.forEach((val, i) => {
-    let Xcollect = val.collect.map(h => h.house);
-    let Ycollect = val.collect.map(h => h.days)
-    lsXData.push(...Xcollect);
-    lsYData.push(...Ycollect);
-  })
   const option = {
+    backgroundColor:'#FEFAF4',
     tooltip: {
-      trigger: 'axis'
+      formatter: '{a} <br/> {b}：{c}'
     },
     xAxis: {
       type: 'category',
-      data: lsXData,
+      data: Data.map(h => h.house),
       splitLine: {
         show: true
       }
     },
     yAxis: {
-      type: 'value',
+      type: 'time',
+      min: new Date('2018-01-01'),
+      max: new Date('2018-06-01'),
       axisLabel: {
-        formatter: '{value}天'
+        formatter: function (value, index) {
+          var date = new Date(value);
+          var texts = [(date.getMonth() + 1), date.getDate()];
+          if (index === 0) {
+            texts.unshift(date.getYear());
+          }
+          return texts.join('-');
+        }
       }
     },
     dataZoom: [
@@ -77,24 +67,9 @@ window.onload = function () {
     ],
     series: [
       {
-        name: '桩基开工-土方完成',
+        name: '节点名称',
         type: 'line',
-        data: lsYData,
-        markLine: {
-          symbol: "none",
-          data: [
-            {
-              name: '平均线',
-              type: 'average',
-              lineStyle: {
-                normal: {
-                  color: "blue",
-                  width: 2,
-                  type: "solid",
-                }
-              }
-            }]
-        }
+        data: Data.map(h => h.date),
       }
     ]
   };
@@ -107,7 +82,7 @@ window.onload = function () {
       <table cellspacing=0>
         <thead>
           <th>楼栋</th>
-          <th>天数</th>
+          <th>日期</th>
           <th>操作</th>
         </thead>
       </table>
@@ -116,16 +91,11 @@ window.onload = function () {
       <table cellspacing=0>
         <tbody class="col-3">
           ${Data.map(val => `
-            <tr>
-              <td colspan="3">${val.name}</td>
-            </tr>
-            ${val.collect.map(col => `
               <tr>
-                <td>${col.house}</td>
-                <td>${col.days}</td>
-                <td><a href="javascript:" id="${col.house}">删除</a></td>
+                <td>${val.house}</td>
+                <td>${val.date}</td>
+                <td><a href="javascript:" id="${val.house}">删除</a></td>
               </tr>
-            `).join('')}
           </tbody>`).join('')}
       </table>
     </div>`;
