@@ -5,9 +5,7 @@ import 'echarts/lib/component/dataZoom';
 import css from '../../style/theme.less';
 
 window.onload = function () {
-  const dom = document.getElementById("main");
-  const myChart = echarts.init(dom);
-  let Data = [{
+  window.Data = [{
     house: '1#',
     date: '2018-02-12',
   }, {
@@ -29,22 +27,36 @@ window.onload = function () {
     house: '7#',
     date: '2018-05-10',
   }];
+  renderPage(window.Data);
+
+  document.addEventListener("click", function (event) {
+    var target = event.target;
+    if (target.nodeName == "A") {
+      let index = target.getAttribute("id");
+      deleteJD(index);
+    }
+  })
+}
+
+function renderPage(data) {
+  const dom = document.getElementById("main");
+  const tableDom = document.getElementById('table_container');
+  const myChart = echarts.init(dom);
   const option = {
-    backgroundColor:'#FEFAF4',
+    backgroundColor: '#FEFAF4',
     tooltip: {
       formatter: '{a} <br/> {b}：{c}'
     },
     xAxis: {
       type: 'category',
-      data: Data.map(h => h.house),
-      splitLine: {
-        show: true
-      }
+      boundaryGap: false,
+      data: data.map(h => h.house)
     },
     yAxis: {
       type: 'time',
       min: new Date('2018-01-01'),
-      max: new Date('2018-06-01'),
+      max: new Date('2018-06-30'),
+      boundaryGap: false,
       axisLabel: {
         formatter: function (value, index) {
           var date = new Date(value);
@@ -69,14 +81,10 @@ window.onload = function () {
       {
         name: '节点名称',
         type: 'line',
-        data: Data.map(h => h.date),
+        data: data.map(h => h.date),
       }
     ]
   };
-
-  myChart.setOption(option, true);
-
-  const tableDom = document.getElementById('table_container');
   let tmpl = `
     <div class="div-head">
       <table cellspacing=0>
@@ -90,14 +98,20 @@ window.onload = function () {
     <div class="div-body">
       <table cellspacing=0>
         <tbody class="col-3">
-          ${Data.map(val => `
+          ${data.map((val, i) => `
               <tr>
                 <td>${val.house}</td>
                 <td>${val.date}</td>
-                <td><a href="javascript:" id="${val.house}">删除</a></td>
+                <td><a href="javascript:" id="${i}">删除</a></td>
               </tr>
           </tbody>`).join('')}
       </table>
     </div>`;
+  myChart.setOption(option, true);
   tableDom.innerHTML = tmpl;
+}
+
+function deleteJD(i) {
+  window.Data.splice(i, 1);
+  renderPage(window.Data);
 }

@@ -35,6 +35,7 @@ window.onload = function () {
     jiedian: '节点9'
   }];
   renderPage(window.Data);
+
   document.addEventListener("click", function (event) {
     var target = event.target;
     if (target.nodeName == "A") {
