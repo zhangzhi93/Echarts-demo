@@ -44,8 +44,8 @@ function renderPage(data) {
     },
     yAxis: {
       type: 'time',
-      min: new Date('2018-01-01'),
-      max: new Date('2018-06-30'),
+      //min: new Date('2018-01-01'),
+      //max: new Date('2018-06-30'),
       boundaryGap: false,
       axisLabel: {
         formatter: function (value, index) {

@@ -10,7 +10,7 @@ window.onload = function () {
   axios.get(`${util.Base.contextPath}yh_doublenode_show_1_0${util.Base.endPath}`, {
     params: {
       beginnodeid: '2',
-      endnodeid:'3',
+      endnodeid: '3',
       buildid: '5,6'
     }
   })
@@ -44,6 +44,9 @@ function renderPage(data) {
     },
     yAxis: {
       type: 'value',
+      max: function (val) {
+        return val.max + 5;
+      },
       axisLabel: {
         formatter: '{value}天'
       }
@@ -93,17 +96,10 @@ function renderPage(data) {
     <div class="div-body">
       <table cellspacing=0>
         <tbody class="col-3">
-          ${Data.map(val => `
+          ${data.map(val => `
             <tr>
               <td colspan="3">${val.name}</td>
             </tr>
-            ${val.collect.map(col => `
-              <tr>
-                <td>${col.house}</td>
-                <td>${col.days}</td>
-                <td><a href="javascript:" id="${col.house}">删除</a></td>
-              </tr>
-            `).join('')}
           </tbody>`).join('')}
       </table>
     </div>`;

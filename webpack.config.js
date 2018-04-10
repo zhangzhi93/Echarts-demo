@@ -12,7 +12,7 @@ module.exports = {
   output: {
     filename: '[name]/main.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'dist/'
+    //publicPath: './dist'
   },
   devtool: 'source-map',
   mode: 'development',
@@ -23,7 +23,7 @@ module.exports = {
       exclude: /node_modules/,
       include: path.resolve(__dirname, 'src'),
       use: "babel-loader"
-    },{
+    }, {
       test: /\.less$/,
       use: [
         'style-loader',
@@ -57,35 +57,48 @@ module.exports = {
       title: 'index',
       filename: 'lineChart/index.html',
       template: './index.ejs',
-      chunks: ['lineChart','common'],
-      inject:'head'
+      chunks: ['lineChart', 'common'],
+      inject: 'head'
     }),
     new HtmlWebpackPlugin({
       filename: 'pieChart/index.html',
       template: './index.ejs',
-      chunks: ['pieChart','common'],
-      inject:'head'
+      chunks: ['pieChart', 'common'],
+      inject: 'head'
     }),
     new HtmlWebpackPlugin({
       filename: 'zxChart/index.html',
       template: './index.ejs',
-      chunks: ['zxChart','common'],
-      inject:'head'
+      chunks: ['zxChart', 'common'],
+      inject: 'head'
     }),
     new HtmlWebpackPlugin({
       filename: 'singlezxChart/index.html',
       template: './index.ejs',
-      chunks: ['singlezxChart','common'],
-      inject:'head'
+      chunks: ['singlezxChart', 'common'],
+      inject: 'head'
     }),
   ],
   devServer: {
     contentBase: './dist',
     hot: true,
     compress: true,
-    host: 'localhost',
+    //host: 'localhost',
     port: 8080,
     open: true,
-    inline: true
+    inline: true,
+    progress: true, //显示打包的进度
+    proxy: {
+      '/api': {
+        target: {
+          host: '47.93.193.171',
+          protocol: 'http',
+          port: 7170,
+        },
+        pathRewrite: {"^/api" : ""},
+        changeOrigin: true,
+        secure: false
+      }
+    },
   }
 }

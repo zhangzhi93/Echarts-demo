@@ -16,6 +16,7 @@ window.onload = function () {
     .then(function (res) {
       const data = res.data;
       if (data.result == 0) {
+        window.Data = data.collect;
         renderPage(data.collect);
       } else {
         alert(data.message);

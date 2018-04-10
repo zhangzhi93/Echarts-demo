@@ -8,18 +8,22 @@ import 'echarts/lib/component/dataZoom';
 import css from '../../style/theme.less';
 
 window.onload = function () {
+  const yetaiid = util.getParaValueByName('yetaiid');
+  const type = util.getParaValueByName('type');
+  const areaid = util.getParaValueByName('areaid');
+  const groupid = util.getParaValueByName('groupid');
   axios.get(`${util.Base.contextPath}yh_yetai_show_1_0${util.Base.endPath}`, {
     params: {
-      yetaiid: '3',
-      type: '1',
-      areaid: '4',
-      groupid: '21'
+      yetaiid: yetaiid,
+      type: type,
+      areaid: areaid,
+      groupid: groupid
     }
   })
     .then(function (res) {
       const data = res.data;
       if (data.result == 0) {
-        renderPage(data.collect);
+        renderPage(data.collect,data.node_list);
         document.addEventListener("click", function (event) {
           var target = event.target;
           if (target.nodeName == "A") {
@@ -36,7 +40,7 @@ window.onload = function () {
     });
 }
 
-function renderPage(data) {
+function renderPage(data,list) {
   const dom = document.getElementById("main");
   const tableDom = document.getElementById('table_container');
   const myChart = echarts.init(dom);
@@ -53,7 +57,7 @@ function renderPage(data) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: data.map((val)=>val.jiedian)
+      data: list
     },
     yAxis: {
       type: 'category',
