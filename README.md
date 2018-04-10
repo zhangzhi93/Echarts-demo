@@ -1,5 +1,5 @@
-npm install
+* npm install
 
-npm start 
+* npm start 
 
->open index.html
+* npm run dev

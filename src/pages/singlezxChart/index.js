@@ -45,7 +45,8 @@ function renderPage(data) {
     yAxis: {
       type: 'time',
       min: new Date('2018-01-01'),
-      max: new Date('2018-06-01'),
+      max: new Date('2018-06-30'),
+      boundaryGap: false,
       axisLabel: {
         formatter: function (value, index) {
           var date = new Date(value);
@@ -95,6 +96,12 @@ function renderPage(data) {
           </tbody>`).join('')}
       </table>
     </div>`;
+  myChart.setOption(option, true);
   tableDom.innerHTML = tmpl;
   myChart.setOption(option, true);
+}
+
+function deleteJD(i) {
+  window.Data.splice(i, 1);
+  renderPage(window.Data);
 }
