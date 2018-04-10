@@ -1,42 +1,29 @@
 import echarts from 'echarts/lib/echarts';
-import  'echarts/lib/chart/pie';
+import axios from 'axios';
+import util from '../../js/util';
+import 'echarts/lib/chart/pie';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import css from '../../style/theme.less';
 
 window.onload = function () {
-  window.Data = [{
-    node1: '节点1',
-    node2: '节点2',
-    date1: '2018年2月23日',
-    date2: '2018年2月28日',
-    days: 5,
-  }, {
-    node1: '节点2',
-    node2: '节点3',
-    date1: '2018年2月28日',
-    date2: '2018年2月24日',
-    days: 4,
-  }, {
-    node1: '节点3',
-    node2: '节点4',
-    date1: '2018年2月24日',
-    date2: '2018年2月26日',
-    days: 2,
-  }, {
-    node1: '节点4',
-    node2: '节点5',
-    date1: '2018年2月26日',
-    date2: '2018年2月19日',
-    days: 7,
-  }, {
-    node1: '节点5',
-    node2: '节点6',
-    date1: '2018年2月19日',
-    date2: '2018年2月28日',
-    days: 9,
-  }];
-  renderPage(window.Data);
+  axios.get(`${util.Base.contextPath}yh_manynode_show_1_0${util.Base.endPath}`, {
+    params: {
+      nodes:'2,3,7',
+      buildid: '6'
+    }
+  })
+    .then(function (res) {
+      const data = res.data;
+      if (data.result == 0) {
+        renderPage(data.collect);
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(function (error) {
+      alert(error);
+    });
 }
 
 function renderPage(data) {

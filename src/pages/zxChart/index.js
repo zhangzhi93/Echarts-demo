@@ -1,61 +1,43 @@
 import echarts from 'echarts/lib/echarts';
-import  'echarts/lib/chart/line';
+import axios from 'axios';
+import util from '../../js/util';
+import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/markLine';
 import '../../style/theme.less';
 
 window.onload = function () {
+  axios.get(`${util.Base.contextPath}yh_doublenode_show_1_0${util.Base.endPath}`, {
+    params: {
+      beginnodeid: '2',
+      endnodeid:'3',
+      buildid: '5,6'
+    }
+  })
+    .then(function (res) {
+      const data = res.data;
+      if (data.result == 0) {
+        renderPage(data.collect);
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(function (error) {
+      alert(error);
+    });
+}
+
+function renderPage(data) {
   const dom = document.getElementById("main");
   const myChart = echarts.init(dom);
-  let Data = [{
-    name: '华东一区地块 北区',
-    collect: [{
-      house: '1#',
-      days: 5,
-    }, {
-      house: '2#',
-      days: 8
-    }, {
-      house: '3#',
-      days: 2
-    }, {
-      house: '4#',
-      days: 3
-    }]
-  }, {
-    name: '华东二区地块 北区',
-    collect: [{
-      house: '1#',
-      days: 6
-    }, {
-      house: '2#',
-      days: 1
-    }, {
-      house: '3#',
-      days: 9
-    }, {
-      house: '4#',
-      days: 4
-    }, {
-      house: '5#',
-      days: 2
-    }]
-  }];
-  let lsXData = new Array(),
-    lsYData = new Array();
-  Data.forEach((val, i) => {
-    let Xcollect = val.collect.map(h => h.house);
-    let Ycollect = val.collect.map(h => h.days)
-    lsXData.push(...Xcollect);
-    lsYData.push(...Ycollect);
-  })
+  const tableDom = document.getElementById('table_container');
   const option = {
     tooltip: {
       trigger: 'axis'
     },
     xAxis: {
       type: 'category',
-      data: lsXData,
+      data: data.map(h => h.house),
       splitLine: {
         show: true
       }
@@ -79,7 +61,7 @@ window.onload = function () {
       {
         name: '桩基开工-土方完成',
         type: 'line',
-        data: lsYData,
+        data: data.map(h => h.days),
         markLine: {
           symbol: "none",
           data: [
@@ -98,10 +80,6 @@ window.onload = function () {
       }
     ]
   };
-
-  myChart.setOption(option, true);
-
-  const tableDom = document.getElementById('table_container');
   let tmpl = `
     <div class="div-head">
       <table cellspacing=0>
@@ -129,5 +107,8 @@ window.onload = function () {
           </tbody>`).join('')}
       </table>
     </div>`;
+
+  myChart.setOption(option, true);
+
   tableDom.innerHTML = tmpl;
 }

@@ -1,42 +1,43 @@
 import echarts from 'echarts/lib/echarts';
+import axios from 'axios';
+import util from '../../js/util';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import css from '../../style/theme.less';
 
 window.onload = function () {
+  axios.get(`${util.Base.contextPath}yh_singlenode_show_1_0${util.Base.endPath}`, {
+    params: {
+      nodeid: '2',
+      buildid: '5,6'
+    }
+  })
+    .then(function (res) {
+      const data = res.data;
+      if (data.result == 0) {
+        renderPage(data.build_date_list);
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(function (error) {
+      alert(error);
+    });
+}
+
+function renderPage(data) {
   const dom = document.getElementById("main");
   const myChart = echarts.init(dom);
-  let Data = [{
-    house: '1#',
-    date: '2018-02-12',
-  }, {
-    house: '2#',
-    date: '2018-03-02',
-  }, {
-    house: '3#',
-    date: '2018-05-20',
-  }, {
-    house: '4#',
-    date: '2018-01-18',
-  }, {
-    house: '5#',
-    date: '2018-01-11',
-  }, {
-    house: '6#',
-    date: '2018-02-02',
-  }, {
-    house: '7#',
-    date: '2018-05-10',
-  }];
+  const tableDom = document.getElementById('table_container');
   const option = {
-    backgroundColor:'#FEFAF4',
+    backgroundColor: '#FEFAF4',
     tooltip: {
       formatter: '{a} <br/> {b}：{c}'
     },
     xAxis: {
       type: 'category',
-      data: Data.map(h => h.house),
+      data: data.map(h => h.build_name),
       splitLine: {
         show: true
       }
@@ -67,16 +68,11 @@ window.onload = function () {
     ],
     series: [
       {
-        name: '节点名称',
         type: 'line',
-        data: Data.map(h => h.date),
+        data: data.map(h => h.complete_date),
       }
     ]
   };
-
-  myChart.setOption(option, true);
-
-  const tableDom = document.getElementById('table_container');
   let tmpl = `
     <div class="div-head">
       <table cellspacing=0>
@@ -90,14 +86,15 @@ window.onload = function () {
     <div class="div-body">
       <table cellspacing=0>
         <tbody class="col-3">
-          ${Data.map(val => `
+          ${data.map((val, i) => `
               <tr>
-                <td>${val.house}</td>
-                <td>${val.date}</td>
-                <td><a href="javascript:" id="${val.house}">删除</a></td>
+                <td>#${val.build_name}</td>
+                <td>${val.complete_date}</td>
+                <td><a href="javascript:" id="${i}">删除</a></td>
               </tr>
           </tbody>`).join('')}
       </table>
     </div>`;
   tableDom.innerHTML = tmpl;
+  myChart.setOption(option, true);
 }

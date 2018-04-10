@@ -1,47 +1,39 @@
 import echarts from 'echarts/lib/echarts';
-import  'echarts/lib/chart/line';
+import axios from 'axios';
+import util from '../../js/util';
+import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/dataZoom';
 import css from '../../style/theme.less';
 
 window.onload = function () {
-  window.Data = [{
-    house: '2#',
-    jiedian: '节点1'
-  }, {
-    house: '2#',
-    jiedian: '节点2'
-  }, {
-    house: '5#',
-    jiedian: '节点3'
-  }, {
-    house: '4#',
-    jiedian: '节点4'
-  }, {
-    house: '5#',
-    jiedian: '节点5'
-  }, {
-    house: '1#',
-    jiedian: '节点6'
-  }, {
-    house: '7#',
-    jiedian: '节点7'
-  }, {
-    house: '6#',
-    jiedian: '节点8'
-  }, {
-    house: '3#',
-    jiedian: '节点9'
-  }];
-  renderPage(window.Data);
-  document.addEventListener("click", function (event) {
-    var target = event.target;
-    if (target.nodeName == "A") {
-      let index = target.getAttribute("id");
-      deleteJD(index);
+  axios.get(`${util.Base.contextPath}yh_yetai_show_1_0${util.Base.endPath}`, {
+    params: {
+      yetaiid: '3',
+      type: '1',
+      areaid: '4',
+      groupid: '21'
     }
   })
+    .then(function (res) {
+      const data = res.data;
+      if (data.result == 0) {
+        renderPage(data.collect);
+        document.addEventListener("click", function (event) {
+          var target = event.target;
+          if (target.nodeName == "A") {
+            let index = target.getAttribute("id");
+            deleteJD(index);
+          }
+        })
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(function (error) {
+      alert(error);
+    });
 }
 
 function renderPage(data) {
@@ -61,12 +53,12 @@ function renderPage(data) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['节点1', '节点2', '节点3', '节点4', '节点5', '节点6', '节点7', '节点8', '节点9']
+      data: data.map((val)=>val.jiedian)
     },
     yAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['','1#', '2#', '3#', '4#', '5#', '6#', '7#', '8#', '9#']
+      data: data.map((val)=>val.house)
     },
     dataZoom: [
       {
