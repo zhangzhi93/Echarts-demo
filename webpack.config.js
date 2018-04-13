@@ -14,9 +14,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     //publicPath: './dist'
   },
-  //devtool: 'source-map',
-  //mode: 'development',
-  mode: 'production',
+  devtool: 'source-map',
+  mode: 'development',
+  //mode: 'production',
   module: {
     rules: [{
       test: /\.js$/,
@@ -87,22 +87,23 @@ module.exports = {
     contentBase: './dist',
     hot: true,
     compress: true,
-    //host: 'localhost',
+    host: 'localhost',
     port: 8080,
     open: true,
     inline: true,
     progress: true, //显示打包的进度
-    // proxy: {
-    //   '/api': {
-    //     target: {
-    //       host: '47.93.193.171',
-    //       protocol: 'http',
-    //       port: 7170,
-    //     },
-    //     pathRewrite: { "^/api": "" },
-    //     changeOrigin: true,
-    //     secure: false
-    //   }
-    // },
+    proxy: {
+      '/api': {
+        target:'http://dashiji.gtzmmf.com',
+        // target: {
+        //   host: '47.93.193.171',
+        //   protocol: 'http',
+        //   port: 7170,
+        // },
+        pathRewrite: { "^/api": "" },
+        changeOrigin: true,
+        secure: false
+      }
+    },
   }
 }

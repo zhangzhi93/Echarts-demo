@@ -27,15 +27,17 @@ window.onload = function () {
         if (data.collect.length == 0) {
           util.Alert(cs, '没有查询到相关记录');
         } else {
-          renderPage(data.collect, data.node_list);
+          window.Data = data.collect;
+          window.nodeList = data.node_list;
+          renderPage(data.collect);
         }
-        // document.addEventListener("click", function (event) {
-        //   var target = event.target;
-        //   if (target.nodeName == "A") {
-        //     let index = target.getAttribute("id");
-        //     deleteJD(index);
-        //   }
-        // })
+        document.addEventListener("click", function (event) {
+          var target = event.target;
+          if (target.nodeName == "A") {
+            let index = target.getAttribute("id");
+            deleteJD(index);
+          }
+        })
       } else {
         util.Alert(cs, data.message);
       }
@@ -45,7 +47,7 @@ window.onload = function () {
     });
 }
 
-function renderPage(data, list) {
+function renderPage(data) {
   const dom = document.getElementById("main");
   const tableDom = document.getElementById('table_container');
   const myChart = echarts.init(dom);
@@ -61,21 +63,31 @@ function renderPage(data, list) {
     },
     xAxis: {
       type: 'category',
-      boundaryGap: false,
-      data: list
+      //boundaryGap: false,
+      axisTick: {
+        interval: 0
+      },
+      axisLabel: {
+        interval: 0,
+        rotate: -60
+      },
+      data: window.nodeList
     },
     yAxis: {
       type: 'category',
       boundaryGap: false,
-      data: data.map((val) => val.house)
+      data: data.map((val) => val.house),
+      axisLabel: {
+        formatter: value => value.slice(-2)
+      }
     },
     dataZoom: [
       {
         type: 'inside',
         xAxisIndex: 0,
         filterMode: 'empty',
-        start: 0,
-        end: data.length > 4 ? 4 / data.length * 100 : 100
+        startValue: 0,
+        endValue: 6
       }
     ],
     series: [
@@ -84,8 +96,7 @@ function renderPage(data, list) {
         smooth: true,
         showAllSymbol: true,
         symbolSize: 5,
-        connectNulls: true,
-        data: data.map(val => val.house)
+        data: data.map(val => [val.jiedian, val.house])
       }
     ]
   };
@@ -95,6 +106,7 @@ function renderPage(data, list) {
         <thead>
           <th>楼栋</th>
           <th>当前节点</th>
+          <th>操作</th>
         </thead>
       </table>
     </div>
@@ -105,6 +117,7 @@ function renderPage(data, list) {
             <tr>
               <td>${val.house}</td>
               <td>${val.jiedian}</td>
+              <td><a href="javascript:" id="${i}">删除</a></td>
             </tr>
           </tbody>`).join('')}
       </table>

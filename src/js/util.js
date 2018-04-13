@@ -1,8 +1,8 @@
 
 export default {
   Base: {
-    //contextPath: "/api/",
-    contextPath: "http://dashiji.gtzmmf.com/",
+    contextPath: "/api/",
+    //contextPath: "http://dashiji.gtzmmf.com/",
     endPath: ".do",
   },
   getParaValueByName: function (paraName) {
@@ -18,7 +18,7 @@ export default {
     if (mark == 4) {
       document.location = `xlzalert::${content}`;
     } else {
-      DSJ.ShowMsgBox(content);
+      //DSJ.ShowMsgBox(content);
     };
   }
 }
