@@ -14,8 +14,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     //publicPath: './dist'
   },
-  devtool: 'source-map',
-  mode: 'development',
+  //devtool: 'source-map',
+  //mode: 'development',
+  mode: 'production',
   module: {
     rules: [{
       test: /\.js$/,
@@ -55,25 +56,28 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       title: 'index',
-      filename: 'lineChart/index.html',
+      filename: 'lineChart/yh_yetai_show_1_0.html',
       template: './index.ejs',
       chunks: ['lineChart', 'common'],
       inject: 'head'
     }),
     new HtmlWebpackPlugin({
-      filename: 'pieChart/index.html',
+      title: 'index',
+      filename: 'pieChart/yh_manynode_show_1_0.html',
       template: './index.ejs',
       chunks: ['pieChart', 'common'],
       inject: 'head'
     }),
     new HtmlWebpackPlugin({
-      filename: 'zxChart/index.html',
+      title: 'index',
+      filename: 'zxChart/yh_doublenode_show_1_0.html',
       template: './index.ejs',
       chunks: ['zxChart', 'common'],
       inject: 'head'
     }),
     new HtmlWebpackPlugin({
-      filename: 'singlezxChart/index.html',
+      title: 'index',
+      filename: 'singlezxChart/yh_singlenode_show_1_0.html',
       template: './index.ejs',
       chunks: ['singlezxChart', 'common'],
       inject: 'head'
@@ -88,17 +92,17 @@ module.exports = {
     open: true,
     inline: true,
     progress: true, //显示打包的进度
-    proxy: {
-      '/api': {
-        target: {
-          host: '47.93.193.171',
-          protocol: 'http',
-          port: 7170,
-        },
-        pathRewrite: {"^/api" : ""},
-        changeOrigin: true,
-        secure: false
-      }
-    },
+    // proxy: {
+    //   '/api': {
+    //     target: {
+    //       host: '47.93.193.171',
+    //       protocol: 'http',
+    //       port: 7170,
+    //     },
+    //     pathRewrite: { "^/api": "" },
+    //     changeOrigin: true,
+    //     secure: false
+    //   }
+    // },
   }
 }

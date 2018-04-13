@@ -7,23 +7,30 @@ import 'echarts/lib/component/title';
 import css from '../../style/theme.less';
 
 window.onload = function () {
+  const nodes = util.getParaValueByName('nodes');
+  const buildid = util.getParaValueByName('buildid');
+  const cs = util.getParaValueByName('c_s');
   axios.get(`${util.Base.contextPath}yh_manynode_show_1_0${util.Base.endPath}`, {
     params: {
-      nodes:'2,3,7',
-      buildid: '6'
+      nodes: nodes,
+      buildid: buildid
     }
   })
     .then(function (res) {
       const data = res.data;
       if (data.result == 0) {
-        window.Data = data.collect;
-        renderPage(data.collect);
+        if (data.collect.length == 0) {
+          util.Alert(cs, '没有查询到相关记录');
+        } else {
+          window.Data = data.collect;
+          renderPage(data.collect);
+        }
       } else {
-        alert(data.message);
+        util.Alert(cs, data.message);
       }
     })
     .catch(function (error) {
-      alert(error);
+      util.Alert(cs, error);
     });
 }
 
@@ -72,7 +79,6 @@ function renderPage(data) {
           <th>节点</th>
           <th>日期</th>
           <th>时长</th>
-          <th>操作</th>
         </thead>
       </table>
     </div>
@@ -84,12 +90,10 @@ function renderPage(data) {
               <td>${val.node1}</td>
               <td>${val.date1}</td>
               <td rowspan="2">${val.days}</td>
-              <td><a href="javascript:">删除</a></td>
             </tr>
             <tr>
               <td>${val.node2}</td>
               <td>${val.date2}</td>
-              <td><a href="javascript:">删除</a></td>
             </tr>
           </tbody>`).join('')}
       </table>

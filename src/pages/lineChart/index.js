@@ -12,6 +12,7 @@ window.onload = function () {
   const type = util.getParaValueByName('type');
   const areaid = util.getParaValueByName('areaid');
   const groupid = util.getParaValueByName('groupid');
+  const cs = util.getParaValueByName('c_s');
   axios.get(`${util.Base.contextPath}yh_yetai_show_1_0${util.Base.endPath}`, {
     params: {
       yetaiid: yetaiid,
@@ -23,24 +24,28 @@ window.onload = function () {
     .then(function (res) {
       const data = res.data;
       if (data.result == 0) {
-        renderPage(data.collect,data.node_list);
-        document.addEventListener("click", function (event) {
-          var target = event.target;
-          if (target.nodeName == "A") {
-            let index = target.getAttribute("id");
-            deleteJD(index);
-          }
-        })
+        if (data.collect.length == 0) {
+          util.Alert(cs, '没有查询到相关记录');
+        } else {
+          renderPage(data.collect, data.node_list);
+        }
+        // document.addEventListener("click", function (event) {
+        //   var target = event.target;
+        //   if (target.nodeName == "A") {
+        //     let index = target.getAttribute("id");
+        //     deleteJD(index);
+        //   }
+        // })
       } else {
-        alert(data.message);
+        util.Alert(cs, data.message);
       }
     })
     .catch(function (error) {
-      alert(error);
+      util.Alert(cs, error);
     });
 }
 
-function renderPage(data,list) {
+function renderPage(data, list) {
   const dom = document.getElementById("main");
   const tableDom = document.getElementById('table_container');
   const myChart = echarts.init(dom);
@@ -62,7 +67,7 @@ function renderPage(data,list) {
     yAxis: {
       type: 'category',
       boundaryGap: false,
-      data: data.map((val)=>val.house)
+      data: data.map((val) => val.house)
     },
     dataZoom: [
       {
@@ -90,7 +95,6 @@ function renderPage(data,list) {
         <thead>
           <th>楼栋</th>
           <th>当前节点</th>
-          <th>操作</th>
         </thead>
       </table>
     </div>
@@ -101,7 +105,6 @@ function renderPage(data,list) {
             <tr>
               <td>${val.house}</td>
               <td>${val.jiedian}</td>
-              <td><a href="javascript:" id="${i}">删除</a></td>
             </tr>
           </tbody>`).join('')}
       </table>

@@ -7,22 +7,31 @@ import 'echarts/lib/component/dataZoom';
 import css from '../../style/theme.less';
 
 window.onload = function () {
+  const nodeid = util.getParaValueByName('nodeid');
+  const type = util.getParaValueByName('type');
+  const buildid = util.getParaValueByName('buildid');
+  const cs = util.getParaValueByName('c_s');
   axios.get(`${util.Base.contextPath}yh_singlenode_show_1_0${util.Base.endPath}`, {
     params: {
-      nodeid: '2',
-      buildid: '5,6'
+      nodeid: nodeid,
+      buildid: buildid,
+      type: type
     }
   })
     .then(function (res) {
       const data = res.data;
       if (data.result == 0) {
-        renderPage(data.build_date_list);
+        if (data.build_date_list.length == 0) {
+          util.Alert(cs, '没有查询到相关记录');
+        } else {
+          renderPage(data.build_date_list);
+        }
       } else {
-        alert(data.message);
+        util.Alert(cs, data.message);
       }
     })
     .catch(function (error) {
-      alert(error);
+      util.Alert(cs, error);
     });
 }
 
@@ -80,7 +89,6 @@ function renderPage(data) {
         <thead>
           <th>楼栋</th>
           <th>日期</th>
-          <th>操作</th>
         </thead>
       </table>
     </div>
@@ -89,9 +97,8 @@ function renderPage(data) {
         <tbody class="col-3">
           ${data.map((val, i) => `
               <tr>
-                <td>#${val.build_name}</td>
+                <td>${val.build_name}</td>
                 <td>${val.complete_date}</td>
-                <td><a href="javascript:" id="${i}">删除</a></td>
               </tr>
           </tbody>`).join('')}
       </table>
