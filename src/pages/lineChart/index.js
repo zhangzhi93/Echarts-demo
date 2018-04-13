@@ -3,8 +3,8 @@ import axios from 'axios';
 import util from '../../js/util';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
 import 'echarts/lib/component/dataZoom';
+import 'echarts/lib/component/grid';
 import css from '../../style/theme.less';
 
 window.onload = function () {
@@ -52,8 +52,8 @@ function renderPage(data) {
   const tableDom = document.getElementById('table_container');
   const myChart = echarts.init(dom);
   let option = {
-    title: {
-      text: '同业态分析结果'
+    grid: {
+      top: 20
     },
     tooltip: {
       triggerOn: 'none',
@@ -69,13 +69,25 @@ function renderPage(data) {
       },
       axisLabel: {
         interval: 0,
-        rotate: -60
+        rotate: -45
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          type: 'dotted'
+        }
       },
       data: window.nodeList
     },
     yAxis: {
       type: 'category',
       boundaryGap: false,
+      splitLine: {
+        show: true,
+        lineStyle: {
+          type: 'dotted'
+        }
+      },
       data: data.map((val) => val.house),
       axisLabel: {
         formatter: value => value.slice(-2)
@@ -103,7 +115,7 @@ function renderPage(data) {
   let tmpl = `
     <div class="div-head">
       <table cellspacing=0>
-        <thead>
+        <thead class="col-3">
           <th>楼栋</th>
           <th>当前节点</th>
           <th>操作</th>
@@ -115,7 +127,7 @@ function renderPage(data) {
         <tbody class="col-3">
           ${data.map((val, i) => `
             <tr>
-              <td>${val.house}</td>
+              <td>${val.house.slice(-2)}</td>
               <td>${val.jiedian}</td>
               <td><a href="javascript:" id="${i}">删除</a></td>
             </tr>
