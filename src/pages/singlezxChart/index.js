@@ -24,7 +24,15 @@ window.onload = function () {
         if (data.build_date_list.length == 0) {
           util.Alert(cs, '没有查询到相关记录');
         } else {
+          window.Data = data.build_date_list;
           renderPage(data.build_date_list);
+          document.addEventListener("click", function (event) {
+            var target = event.target;
+            if (target.nodeName == "A") {
+              let index = target.getAttribute("id");
+              deleteJD(index);
+            }
+          })
         }
       } else {
         util.Alert(cs, data.message);
@@ -89,6 +97,7 @@ function renderPage(data) {
         <thead>
           <th>楼栋</th>
           <th>日期</th>
+          <th>操作</th>
         </thead>
       </table>
     </div>
@@ -99,6 +108,7 @@ function renderPage(data) {
               <tr>
                 <td>${val.build_name}</td>
                 <td>${val.complete_date}</td>
+                <td><a href="javascript:" id="${i}">删除</a></td>
               </tr>
           </tbody>`).join('')}
       </table>
