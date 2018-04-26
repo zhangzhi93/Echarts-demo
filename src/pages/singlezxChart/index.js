@@ -4,6 +4,7 @@ import util from '../../js/util';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
+import 'echarts/lib/component/legend';
 import css from '../../style/theme.less';
 
 window.onload = function () {
@@ -25,6 +26,7 @@ window.onload = function () {
           util.Alert(cs, '没有查询到相关记录');
         } else {
           window.Data = data.build_date_list;
+          window.nodename = data.nodename;
           renderPage(data.build_date_list);
           document.addEventListener("click", function (event) {
             var target = event.target;
@@ -52,12 +54,23 @@ function renderPage(data) {
     tooltip: {
       formatter: '{a} <br/> {b}：{c}'
     },
+    legend: {
+      top: 10,
+      data: [window.nodename]
+    },
     xAxis: {
       type: 'category',
-      data: data.map(h => h.build_name),
+      data: data.map(h => `${h.area_name + h.build_name}`),
       splitLine: {
         show: true
-      }
+      },
+      axisTick: {
+        interval: 0
+      },
+      axisLabel: {
+        interval: 0,
+        rotate: -45
+      },
     },
     yAxis: {
       type: 'time',
@@ -86,6 +99,7 @@ function renderPage(data) {
     ],
     series: [
       {
+        name: window.nodename,
         type: 'line',
         data: data.map(h => h.complete_date),
       }
@@ -106,16 +120,15 @@ function renderPage(data) {
         <tbody class="col-3">
           ${data.map((val, i) => `
               <tr>
-                <td>${val.build_name}</td>
+                <td>${val.area_name + val.build_name}</td>
                 <td>${val.complete_date}</td>
                 <td><a href="javascript:" id="${i}">删除</a></td>
-              </tr>
-          </tbody>`).join('')}
+              </tr>`).join('')}
+          </tbody>
       </table>
     </div>`;
   myChart.setOption(option, true);
   tableDom.innerHTML = tmpl;
-  myChart.setOption(option, true);
 }
 
 function deleteJD(i) {

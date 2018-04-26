@@ -130,8 +130,8 @@ function renderPage(data) {
               <td>${val.house.slice(-2)}</td>
               <td>${val.jiedian}</td>
               <td><a href="javascript:" id="${i}">删除</a></td>
-            </tr>
-          </tbody>`).join('')}
+            </tr>`).join('')}
+          </tbody>
       </table>
     </div>`;
   myChart.setOption(option, true);

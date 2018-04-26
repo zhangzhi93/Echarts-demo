@@ -14,9 +14,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     //publicPath: './dist'
   },
-  devtool: 'source-map',
-  mode: 'development',
-  //mode: 'production',
+  //devtool: 'source-map',
+  //mode: 'development',
+  mode: 'production',
   module: {
     rules: [{
       test: /\.js$/,
@@ -34,7 +34,6 @@ module.exports = {
     }]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.SplitChunksPlugin({
       chunks: "all",
       minSize: 30000,
@@ -88,7 +87,7 @@ module.exports = {
     hot: true,
     compress: true,
     host: 'localhost',
-    port: 8080,
+    port: 8000,
     open: true,
     inline: true,
     progress: true, //显示打包的进度
