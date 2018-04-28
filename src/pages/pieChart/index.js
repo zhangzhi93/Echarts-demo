@@ -2,8 +2,11 @@ import echarts from 'echarts/lib/echarts';
 import axios from 'axios';
 import util from '../../js/util';
 import 'echarts/lib/chart/pie';
+import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
+import 'echarts/lib/component/dataZoom';
+import 'echarts/lib/component/legend';
 import css from '../../style/theme.less';
 
 window.onload = function () {
@@ -60,35 +63,75 @@ function renderPage(data, sign) {
     obj.name = `${element.node1}-${element.node2}`;
     pieData.push(obj);
   });
-  const option = {
-    title: {
-      text: window.buildname,
-      top:10,
-      left:'center'
-    },
-    tooltip: {
-      trigger: 'item',
-      formatter: "{b} : {c} ({d}%)"
-    },
-    series: [
-      {
-        type: 'pie',
-        radius: '60%',
-        center: ['50%', '50%'],
-        label: {
-          show: false
-        },
-        data: pieData,
-        itemStyle: {
-          emphasis: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
+  let option;
+  if (sign == "1") {
+    option = {
+      title: {
+        text: window.buildname,
+        top: 10,
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+      },
+      series: [
+        {
+          type: 'pie',
+          radius: '60%',
+          center: ['50%', '50%'],
+          label: {
+            show: false
+          },
+          data: pieData,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
           }
         }
-      }
-    ]
-  };
+      ]
+    };
+  } else {
+    option = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        bottom: 10,
+        data: data.map(val => val.buildname)
+      },
+      xAxis: {
+        type: 'category',
+        data: data[0].collect.map(h => `${h.node1}-${h.node2}`)
+      },
+      yAxis: {
+        type: 'value',
+        max: val => val.max + 2,
+        axisLabel: {
+          formatter: '{value}天'
+        }
+      },
+      dataZoom: [
+        {
+          type: 'inside',
+          xAxisIndex: 0,
+          filterMode: 'empty',
+          start: 0,
+          end: 50,
+        }
+      ],
+      series: data.map(val => {
+        return {
+          type: 'line',
+          data: val.collect.map(d => parseInt(d.days)),
+          name: val.buildname,
+        }
+      })
+    };
+  }
   if (sign === "1") {
     let oneTmpl = `
       <div class="div-head">
@@ -143,8 +186,8 @@ function renderPage(data, sign) {
             </tr>`).join('')}
           </tbody>
         </table>`).join('')}`;
-    dom.style.display = "none";
     tableDom.innerHTML = moreTmpl;
+    myChart.setOption(option, true);
   }
 }
 
