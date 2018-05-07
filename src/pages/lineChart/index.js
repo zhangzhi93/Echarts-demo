@@ -90,7 +90,7 @@ function renderPage(data) {
       },
       data: data.map((val) => val.house),
       axisLabel: {
-        formatter: value => value.slice(-2)
+        formatter: value => value.split(',')[1]
       }
     },
     dataZoom: [
@@ -127,7 +127,7 @@ function renderPage(data) {
         <tbody class="col-3">
           ${data.map((val, i) => `
             <tr>
-              <td>${val.house.slice(-2)}</td>
+              <td>${val.house}</td>
               <td>${val.jiedian}</td>
               <td><a href="javascript:" id="${i}">删除</a></td>
             </tr>`).join('')}

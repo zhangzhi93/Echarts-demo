@@ -4,6 +4,7 @@ import util from '../../js/util';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/markLine';
+import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/component/legend';
 import '../../style/theme.less';
 

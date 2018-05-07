@@ -74,16 +74,12 @@ function renderPage(data) {
     },
     yAxis: {
       type: 'time',
-      //min: new Date('2018-01-01'),
-      //max: new Date('2018-06-30'),
       boundaryGap: false,
       axisLabel: {
+        rotate: 60,
         formatter: function (value, index) {
           var date = new Date(value);
-          var texts = [(date.getMonth() + 1), date.getDate()];
-          if (index === 0) {
-            texts.unshift(date.getYear());
-          }
+          var texts = [(date.getYear().toString()).slice(-2),(date.getMonth() + 1), date.getDate()];
           return texts.join('-');
         }
       }

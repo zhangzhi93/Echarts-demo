@@ -7,6 +7,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/component/legend';
+import 'echarts/lib/component/grid';
 import css from '../../style/theme.less';
 
 window.onload = function () {
@@ -99,10 +100,15 @@ function renderPage(data, sign) {
       tooltip: {
         trigger: 'axis'
       },
-      legend: {
-        bottom: 10,
-        data: data.map(val => val.buildname)
+      grid: {
+        top: 80,
+        bottom: 20,
       },
+      //legend: {
+      //  type: 'scroll',
+      //  top: 10,
+      //  data: data.map(val => val.buildname)
+      //},
       xAxis: {
         type: 'category',
         data: data[0].collect.map(h => `${h.node1}-${h.node2}`)
