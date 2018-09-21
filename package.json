@@ -4,8 +4,8 @@
   "description": "a echarts project",
   "main": "index.js",
   "scripts": {
-    "start": "webpack",
-    "dev": "webpack-dev-server --hot",
+    "start": "webpack-dev-server --hot",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "janz",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "echarts": "^4.0.4"
+    "babel-runtime": "^6.26.0",
+    "echarts": "^4.1.0"
   }
 }

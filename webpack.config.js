@@ -14,9 +14,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     //publicPath: './dist'
   },
-  //devtool: 'source-map',
-  //mode: 'development',
-  mode: 'production',
+  devtool: 'source-map',
+  mode: 'development',
+  //mode: 'production',
   module: {
     rules: [{
       test: /\.js$/,
@@ -87,15 +87,15 @@ module.exports = {
     hot: true,
     compress: true,
     host: 'localhost',
-    port: 8080,
+    port: 6060,
     open: true,
     inline: true,
     //progress: true, //显示打包的进度
     proxy: {
       '/api': {
         //target:'http://dashiji.gtzmmf.com',
-        target:'http://user-dashiji.gtzmmf.com',
-        //target:'http://139.224.8.29:19080/',
+        //target:'http://user-dashiji.gtzmmf.com',
+        target:'http://139.224.8.29:19080/',
         // target: {
         //   host: '47.93.193.171',
         //   protocol: 'http',
