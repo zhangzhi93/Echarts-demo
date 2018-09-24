@@ -1,11 +1,11 @@
 
 export default {
   Base: {
-    contextPath: "/api/",
+    //contextPath: "/api/",
     //contextPath: "http://dashiji.gtzmmf.com/",
     //contextPath: "http://user-dashiji.gtzmmf.com/",
     //contextPath: "http://47.93.193.171:7170/",
-    //contextPath: "http://139.224.8.29:19080/",
+    contextPath: "http://139.224.8.29:19080/",
     endPath: ".do",
   },
   getParaValueByName: function (paraName) {
