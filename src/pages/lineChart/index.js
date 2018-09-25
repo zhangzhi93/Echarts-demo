@@ -5,9 +5,10 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/component/grid';
-import css from '../../style/theme.less';
+import  '../../style/theme.less';
 
 window.onload = function () {
+  alert(window.location.href);
   const yetaiid = util.getParaValueByName('yetaiid');
   const type = util.getParaValueByName('type');
   const areaid = util.getParaValueByName('areaid');
@@ -56,19 +57,19 @@ function renderPage(data) {
       top: 20
     },
     tooltip: {
-      triggerOn: 'none',
-      formatter: function (params) {
-        return 'X: ' + params.data[0].toFixed(2) + '<br>Y: ' + params.data[1].toFixed(2);
-      }
+      trigger: 'axis',
+      // formatter: function (params) {
+      //   return 'X: ' + params.data[0].toFixed(2) + '<br>Y: ' + params.data[1].toFixed(2);
+      // }
     },
     xAxis: {
       type: 'category',
       //boundaryGap: false,
-      axisTick: {
-        interval: 0
-      },
+      // axisTick: {
+      //   interval: 0
+      // },
       axisLabel: {
-        interval: 0,
+        //interval: 0,
         rotate: -45
       },
       splitLine: {
