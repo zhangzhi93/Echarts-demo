@@ -8,7 +8,7 @@ import 'echarts/lib/component/grid';
 import  '../../style/theme.less';
 
 window.onload = function () {
-  alert(window.location.href);
+  //alert(window.location.href);
   const yetaiid = util.getParaValueByName('yetaiid');
   const type = util.getParaValueByName('type');
   const areaid = util.getParaValueByName('areaid');

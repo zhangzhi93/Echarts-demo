@@ -14,9 +14,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     //publicPath: './dist'
   },
-  devtool: 'source-map',
-  mode: 'development',
-  //mode: 'production',
+  //devtool: 'source-map',
+  //mode: 'development',
+  mode: 'production',
   module: {
     rules: [{
       test: /\.js$/,
@@ -90,7 +90,7 @@ module.exports = {
     port: 6060,
     open: true,
     inline: true,
-    //progress: true, //显示打包的进度
+    progress: true, //显示打包的进度
     proxy: {
       '/api': {
         //target:'http://dashiji.gtzmmf.com',
