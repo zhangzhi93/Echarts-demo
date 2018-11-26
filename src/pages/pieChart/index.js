@@ -179,12 +179,14 @@ function renderPage(data, sign) {
               <td>节点</td>
               <td>日期</td>
               <td>时长</td>
+              <td>平均工期</td>
             </tr>
-          ${val.collect.map(d => `
+          ${val.collect.map((d, i) => `
             <tr>
               <td>${d.node1}</td>
               <td>${d.date1}</td>
               <td rowspan="2">${d.days}</td>
+              ${i === 0 ? `<td rowspan="${val.collect.length * 2}">${averageValue(val.collect)}</td>` : null}
             </tr>
             <tr>
               <td>${d.node2}</td>
@@ -200,4 +202,12 @@ function renderPage(data, sign) {
 function deleteJD(i) {
   window.Data.splice(i, 1);
   renderPage(window.Data);
+}
+
+function averageValue(arr) {
+  let value = 0;
+  arr.forEach((val, index) => {
+    value += parseInt(Math.abs(val.days));
+  })
+  return (value / 3).toFixed(2);
 }
