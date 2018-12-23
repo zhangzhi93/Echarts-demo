@@ -172,7 +172,7 @@ function renderPage(data, sign) {
       ${data.map(val => `
         <table cellspacing=0 style="margin-top:10px;border: 1px solid #e3e3e3;">
           <thead>
-            <th colspan="3">${val.buildname}</th>
+            <th colspan="4">${val.buildname}</th>
           </thead>
           <tbody class="col-4">
             <tr>
@@ -186,7 +186,7 @@ function renderPage(data, sign) {
               <td>${d.node1}</td>
               <td>${d.date1}</td>
               <td rowspan="2">${d.days}</td>
-              ${i === 0 ? `<td rowspan="${val.collect.length * 2}">${averageValue(val.collect)}</td>` : null}
+              ${i === 0 ? `<td rowspan="${val.collect.length * 2}">${averageValue(val.collect)}</td>` : ''}
             </tr>
             <tr>
               <td>${d.node2}</td>
@@ -209,5 +209,5 @@ function averageValue(arr) {
   arr.forEach((val, index) => {
     value += parseInt(Math.abs(val.days));
   })
-  return (value / 3).toFixed(2);
+  return (value / arr.length).toFixed(2);
 }
