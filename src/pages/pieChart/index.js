@@ -8,7 +8,7 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/grid';
-import css from '../../style/theme.less';
+import '../../style/theme.less';
 
 window.onload = function () {
   const nodes = util.getParaValueByName('nodes');
@@ -168,32 +168,36 @@ function renderPage(data, sign) {
     myChart.setOption(option, true);
     tableDom.innerHTML = oneTmpl;
   } else {
+    //---2019-05-05 add
     let moreTmpl = `
-      ${data.map(val => `
-        <table cellspacing=0 style="margin-top:10px;border: 1px solid #e3e3e3;">
+      <div class="scroll-table">
+        <table cellspacing=0>
           <thead>
-            <th colspan="4">${val.buildname}</th>
+            <tr>
+              <th>楼栋</th>
+              ${data[0].collect.map((d, i) => `
+              <th>
+                <div style="width:100px">${d.node1}</div>
+                <div style="width:100px">${d.node2}</div>
+              </th>`).join('')}
+              <th>合计</th>
+              <th>平均工期</th>
+            </tr>
           </thead>
           <tbody class="col-4">
+          ${data.map((val, n) => `
             <tr>
-              <td>节点</td>
-              <td>日期</td>
-              <td>时长</td>
-              <td>平均工期</td>
+              <td>${val.stoname}</td>
+              ${val.collect.map((d, i) => `
+              <td>${d.days}</td>
+              `).join('')}
+              <td>${val.heji}</td>
+              <td>${val.pingjun}</td>
             </tr>
-          ${val.collect.map((d, i) => `
-            <tr>
-              <td>${d.node1}</td>
-              <td>${d.date1}</td>
-              <td rowspan="2">${d.days}</td>
-              ${i === 0 ? `<td rowspan="${val.collect.length * 2}">${averageValue(val.collect)}</td>` : ''}
-            </tr>
-            <tr>
-              <td>${d.node2}</td>
-              <td>${d.date2}</td>
-            </tr>`).join('')}
+          `).join('')}
           </tbody>
-        </table>`).join('')}`;
+        </table>
+      </div>`;
     tableDom.innerHTML = moreTmpl;
     myChart.setOption(option, true);
   }

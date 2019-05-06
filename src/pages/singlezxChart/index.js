@@ -5,7 +5,7 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/component/legend';
-import css from '../../style/theme.less';
+import '../../style/theme.less';
 
 window.onload = function () {
   const nodeid = util.getParaValueByName('nodeid');
