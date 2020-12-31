@@ -1,6 +1,10 @@
-var path = require('path');
-var webpack = require("webpack");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
+console.log(process.env.NODE_ENV)
 
 module.exports = {
   entry: {
@@ -12,17 +16,13 @@ module.exports = {
   output: {
     filename: '[name]/main.js',
     path: path.resolve(__dirname, 'dist'),
-    //publicPath: './dist'
+    // publicPath: './dist'
   },
-  //devtool: 'source-map',
-  //mode: 'development',
-  mode: 'production',
   module: {
     rules: [{
       test: /\.js$/,
-      type: "javascript/auto",
-      exclude: /node_modules/,
       include: path.resolve(__dirname, 'src'),
+      exclude: /node_modules/,
       use: "babel-loader"
     }, {
       test: /\.less$/,
@@ -33,57 +33,33 @@ module.exports = {
       ]
     }]
   },
-  plugins: [
-    new webpack.optimize.SplitChunksPlugin({
-      chunks: "all",
-      minSize: 30000,
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 10,
+      maxSize: 0,
       minChunks: 1,
       maxAsyncRequests: 5,
       maxInitialRequests: 3,
-      name: 'common',
+      name: true,
       cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          priority: -10
+        },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
-        },
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          name: 'common',
+          reuseExistingChunk: true
         }
       }
-    }),
-    new HtmlWebpackPlugin({
-      title: 'index',
-      filename: 'lineChart/yh_yetai_show_1_0.html',
-      template: './index.ejs',
-      chunks: ['lineChart', 'common'],
-      inject: 'head'
-    }),
-    new HtmlWebpackPlugin({
-      title: 'index',
-      filename: 'pieChart/yh_manynode_show_1_0.html',
-      template: './index.ejs',
-      chunks: ['pieChart', 'common'],
-      inject: 'head'
-    }),
-    new HtmlWebpackPlugin({
-      title: 'index',
-      filename: 'zxChart/yh_doublenode_show_1_0.html',
-      template: './index.ejs',
-      chunks: ['zxChart', 'common'],
-      inject: 'head'
-    }),
-    new HtmlWebpackPlugin({
-      title: 'index',
-      filename: 'singlezxChart/yh_singlenode_show_1_0.html',
-      template: './index.ejs',
-      chunks: ['singlezxChart', 'common'],
-      inject: 'head'
-    }),
-  ],
+    }
+  },
+  plugins: [],
   devServer: {
-    contentBase: './dist',
+    contentBase: path.resolve(__dirname, 'dist'),
     hot: true,
     compress: true,
     host: 'localhost',
@@ -94,17 +70,45 @@ module.exports = {
     proxy: {
       '/api': {
         //target:'http://dashiji.gtzmmf.com',
-        //target:'http://user-dashiji.gtzmmf.com',
-        target:'http://139.224.8.29:19080/',
-        // target: {
-        //   host: '47.93.193.171',
-        //   protocol: 'http',
-        //   port: 7170,
-        // },
+        target: 'http://user-dashiji.gtzmmf.com',
+        //target: 'http://139.224.8.29:19080/',
         pathRewrite: { "^/api": "" },
         changeOrigin: true,
-        secure: false
       }
     },
   }
+}
+
+if (isProduction) {
+  module.exports.plugins.push(
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'index',
+      filename: 'lineChart/yh_yetai_show_1_0.html',
+      template: './index.ejs',
+      chunks: ['lineChart', 'vendors', 'common'],
+      inject: 'head'
+    }),
+    new HtmlWebpackPlugin({
+      title: 'index',
+      filename: 'pieChart/yh_manynode_show_1_0.html',
+      template: './index.ejs',
+      chunks: ['pieChart', 'vendors', 'common'],
+      inject: 'head'
+    }),
+    new HtmlWebpackPlugin({
+      title: 'index',
+      filename: 'zxChart/yh_doublenode_show_1_0.html',
+      template: './index.ejs',
+      chunks: ['zxChart', 'vendors', 'common'],
+      inject: 'head'
+    }),
+    new HtmlWebpackPlugin({
+      title: 'index',
+      filename: 'singlezxChart/yh_singlenode_show_1_0.html',
+      template: './index.ejs',
+      chunks: ['singlezxChart', 'vendors', 'common'],
+      inject: 'head'
+    }),
+  );
 }
